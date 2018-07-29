@@ -11,7 +11,7 @@ class NullableTest {
 
         //replace TODO with a value to make the test pass
 
-        val x: Int? = TODO()
+        val x: Int? = null
 
         assert(x).isEqualTo(null)
 
@@ -20,12 +20,12 @@ class NullableTest {
     @Test
     fun operations() {
 
-        val x: Int? = 5
+        val x: Int = 5
 
         var y = 7
 
         // uncomment and change x type to make test pass
-//        val y += x
+        y += x
 
         assert(y).isEqualTo(12)
 
@@ -35,7 +35,7 @@ class NullableTest {
     fun questionMark() {
 
         //change the value to make the test pass
-        val x: Int? = 7
+        val x: Int? = null
 
         val y = x?.plus(5)
 
@@ -47,7 +47,7 @@ class NullableTest {
     fun orEmpty() {
         //replace TODO with a value to make the test pass
 
-        val a: String? = TODO()
+        val a: String? = null
 
         assert(a.orEmpty()).isEqualTo("")
     }
@@ -59,7 +59,7 @@ class NullableTest {
         fun double(x: Int) = x * 2
 
         //replace TODO with a value to make the test pass
-        fun nullDouble(x: Int?) = if (x == null) TODO() else double(x)
+        fun nullDouble(x: Int?) = if (x == null) 0 else double(x)
 
 
         assert(nullDouble(5)).isEqualTo(10)
@@ -70,7 +70,7 @@ class NullableTest {
     fun safeCalls() {
 
         //fix parameters to make test pass
-        fun triple(x: Int?) = x?.times(5)
+        fun triple(x: Int?): Int? = x?.times(3)
 
         assert(triple(null)).isEqualTo(null)
         assert(triple(4)).isEqualTo(12)
@@ -82,7 +82,7 @@ class NullableTest {
         fun double(x: Int) = x * 2
 
         //replace TODO with a value to make the test pass
-        fun nullDouble(x: Int?) = double(x ?: TODO())
+        fun nullDouble(x: Int?) = double(x ?: 0)
 
         assert(nullDouble(5)).isEqualTo(10)
         assert(nullDouble(null)).isEqualTo(0)
@@ -92,8 +92,9 @@ class NullableTest {
     fun middleName() {
         //replace TODO with a value to make the test pass
 
-        fun name(first: String, middle: String?, surname: String){
-            TODO()
+        fun name(first: String, middle: String?, surname: String): String {
+            val middleInitial = middle?.take(1)?.plus(". ").orEmpty()
+            return "$first $middleInitial$surname"
         }
         assert(name("James", "Tiberius", "Kirk")).isEqualTo("James T. Kirk")
         assert(name("John", null, "Doe")).isEqualTo("John Doe")

@@ -4,6 +4,8 @@ import assertk.assert
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import org.junit.jupiter.api.Test
+import java.lang.Math.sqrt
+import java.util.*
 
 class FunTest {
 
@@ -11,9 +13,11 @@ class FunTest {
     fun defineAFunctionWithoutAClass(){
 
         //replace TODO with a value to make the test pass
-        fun myfun(): String { return TODO()}
+        fun myfun(): String { return "Kotlin is Fun"}
+        fun myfun2(): String = "Kotlin is Fun"
 
         assert(myfun()).isEqualTo("Kotlin is Fun")
+        assert(myfun2()).isEqualTo("Kotlin is Fun")
     }
 
     @Test
@@ -22,7 +26,7 @@ class FunTest {
         //replace TODO with a value to make the test pass
         fun myFun(): String {
             fun myNestedFun(): String {
-                return TODO()
+                return "Kotlin Fun can be nested"
             }
             return myNestedFun()
         }
@@ -35,7 +39,7 @@ class FunTest {
     fun singleStatementFunDeclaration(){
 
         //replace TODO with a value to make the test pass
-        fun double(x: Int): Int = TODO()
+        fun double(x: Int): Int = x * 2
 
         assert(double(5)).isEqualTo(10)
 
@@ -46,7 +50,7 @@ class FunTest {
 
         //replace TODO with a value to make the test pass
 
-        val now: java.util.Date = TODO()
+        val now: java.util.Date = Date()
 
         assert(now).isNotNull()
 
@@ -56,8 +60,8 @@ class FunTest {
     fun defaultParameter(){
 
         // fix it to make test pass
-        fun answer(x: Int = 37){
-            x.toString()
+        fun answer(x: Int = 42): String {
+            return x.toString()
         }
 
         assert(answer(12)).isEqualTo("12")
@@ -71,7 +75,9 @@ class FunTest {
     fun namedParameters(){
 
         //replace TODO with a value to make the test pass
-        fun pitagora(hypotenuse: Double, leg: Double): Double = TODO()
+        fun pitagora(hypotenuse: Double, leg: Double): Double  {
+            return sqrt(hypotenuse * hypotenuse - leg * leg)
+        }
 
         assert(pitagora(5.0, 4.0)).isEqualTo(3.0)
         assert(pitagora(leg = 4.0, hypotenuse = 5.0)).isEqualTo(3.0)
@@ -93,7 +99,7 @@ class FunTest {
 
         val result = myConcat(*nums)
 
-        val result2 = myConcat() //choose correct arguments
+        val result2 = myConcat("1", "2", "3") //choose correct arguments
 
         assert(result).isEqualTo(result2)
     }

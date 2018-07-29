@@ -2,15 +2,13 @@ package com.gamasoft.kotlin.kss.intro08
 
 import assertk.assert
 import assertk.assertions.isEqualTo
-import assertk.assertions.isLessThan
 import org.junit.jupiter.api.Test
-import java.util.*
 
 class AdvancedFunTest {
 
     tailrec fun sillyMulti(x: Int, times: Int, a: Int = 0): Int {
         return if (times == 0) a
-        else TODO()
+        else sillyMulti(x, times - 1, a + x)
     }
 
 
@@ -26,7 +24,7 @@ class AdvancedFunTest {
     @Test
     fun classExtension(){
 
-        fun Int.hello(): String = TODO()
+        fun Int.hello(): String = "Hi, I'm $this"
 
         assertk.assert(5.hello()).isEqualTo("Hi, I'm 5")
         assertk.assert(42.hello()).isEqualTo("Hi, I'm 42")
@@ -36,7 +34,7 @@ class AdvancedFunTest {
     @Test
     fun nullableClassExtension(){
 
-        fun Int?.hello(): String = TODO()
+        fun Int?.hello(): String = "Hi, I'm ${this ?: "no one"}"
 
         assertk.assert(5.hello()).isEqualTo("Hi, I'm 5")
         assertk.assert(null.hello()).isEqualTo("Hi, I'm no one")
@@ -46,7 +44,7 @@ class AdvancedFunTest {
     @Test
     fun infixNotation(){
 
-        infix fun <A,B>A.pp(other: B): Pair<A,B> = TODO()
+        infix fun <A,B>A.pp(other: B): Pair<A,B> = Pair(this, other)
 
         assertk.assert(5 pp 8).isEqualTo(Pair(5, 8))
         assertk.assert("joe" pp 45).isEqualTo(Pair("joe", 45))
@@ -57,7 +55,7 @@ class AdvancedFunTest {
     @Test
     fun funNames(){
 
-        infix fun <A,B>A.`@`(other: B): Pair<A,B> = TODO()
+        infix fun <A,B>A.`@`(other: B): Pair<A,B> = Pair(this, other)
 
         assertk.assert(5 `@` 8).isEqualTo(Pair(5, 8))
         assertk.assert("joe" `@` 45).isEqualTo(Pair("joe", 45))
@@ -66,12 +64,12 @@ class AdvancedFunTest {
 
 
     interface DbContext{
-        fun DbContext.fetchFromDb(key: String):String
+        fun fetchFromDb(key: String):String
     }
 
-    class InMemDb: DbContext{
-        override fun DbContext.fetchFromDb(key: String): String {
-            TODO()
+    class InMemDb: DbContext {
+        override fun fetchFromDb(key: String): String {
+            return "joe"
         }
     }
 
@@ -90,16 +88,24 @@ class AdvancedFunTest {
 
     inline fun <reified T> getOrDefault(value: T?):T {
         return if (value == null)
-            T::class.java.getDeclaredConstructor().newInstance()
+            return if (String::javaClass == T::class.java) {
+                "abc" as T
+            } else {
+                T::class.java.getDeclaredConstructor().newInstance()
+            }
+
         else
             value
     }
+
+    class Foo
 
     @Test
     fun reifiedGeneric(){
 
         val s1 = getOrDefault("abc")
         val s2 = getOrDefault<String>(null)
+        println(getOrDefault<Foo>(null))
 
         assert(s1).isEqualTo(s2)
 

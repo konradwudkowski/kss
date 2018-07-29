@@ -10,7 +10,7 @@ class CollectionsTest {
     fun mutableList(){
 
         val myList: MutableList<Int> = mutableListOf()
-        (1 .. 10).forEach{ myList.add(it) }
+        (1 .. 42).forEach{ myList.add(it) }
 
         assert(myList).hasSize(42)
 
@@ -22,9 +22,9 @@ class CollectionsTest {
 
         val myList = (1 .. 10).toList()
 
-        val myList2 = listOf(1,2,3,4)
+        val myList2 = listOf(1,2,3,4).toTypedArray()
 
-        assert(myList).containsAll(myList2)
+        assert(myList).containsAll(*myList2)
 
     }
 
@@ -32,7 +32,7 @@ class CollectionsTest {
     @Test
     fun listPlusOperator(){
 
-        val nums = ('1' .. '9').toList()
+        val nums = ('0' .. '9').toList()
 
         val chars = ('a'..'z').toList()
 
@@ -45,7 +45,7 @@ class CollectionsTest {
     fun listMinusOperator(){
 
         val chars = ('a'..'z').toList()
-        val vowels = listOf('a', 'e', 'u')
+        val vowels = listOf('a', 'e', 'u', 'i', 'o')
 
         val consonants = chars - vowels
 
@@ -59,7 +59,7 @@ class CollectionsTest {
         val pricesShop1 = mapOf("toy car" to 10, "cards" to 5, "candy" to 2)
         val pricesShop2 = mapOf("toy car" to 12, "teddy bear" to 8, "book" to 6)
 
-        val notToBuy = "book"
+        val notToBuy = "toy car"
         val all = pricesShop1 + pricesShop2 - notToBuy
 
         assert(all).contains("cards", 5)
@@ -70,7 +70,7 @@ class CollectionsTest {
     @Test
     fun sumOfEvenNumbers(){
 
-        val total = (1 .. 20).toList().filter { it % 3 == 0 } .sum()
+        val total = (1 .. 20).toList().filter { it % 2 == 0 } .sum()
 
         assert(total).isEqualTo(110)
     }
@@ -78,9 +78,9 @@ class CollectionsTest {
     @Test
     fun mapOverCollection(){
 
-        val square: (Int) -> Int = { it + it }
+        val square: (Int) -> Int = { it * it }
         val total = (1 .. 24).toList()
-                .map (square)
+                .map(square)
                 .sum()
 
         assert(total).isEqualTo(4900)
@@ -91,7 +91,7 @@ class CollectionsTest {
     fun foldOverCollection(){
 
         val factor = (1 .. 10).toList()
-                .fold (1) { a, x -> TODO()}
+                .fold (1) { a, x -> a * x }
 
         assert(factor).isEqualTo(3628800)
     }
@@ -102,7 +102,7 @@ class CollectionsTest {
 
         val word = "Hello World".toList()
         val factor = word
-                .fold ("") { a, c -> TODO() }
+                .fold ("") { a, c -> c + a }
 
         assert(factor).isEqualTo("dlroW olleH")
     }
@@ -114,7 +114,7 @@ class CollectionsTest {
 
         val words = listOf("Hello".toList(), "World".toList(), "Kotlin".toList())
 
-        val transform: (List<Char>) -> List<Char> = TODO()
+        val transform: (List<Char>) -> List<Char> = { it }
 
         val charsList = words
                 .flatMap(transform)
@@ -131,7 +131,11 @@ class CollectionsTest {
         var num = 1
         var prevNum = 1
         val fibonacci = generateSequence {
-            num + prevNum
+            val updatedNum = num + prevNum
+            val updatedPrev = num
+            num = updatedNum
+            prevNum = updatedPrev
+            updatedNum
         }
 
         assert(fibonacci.take(10).last()).isEqualTo(144)
